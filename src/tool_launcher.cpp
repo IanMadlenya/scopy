@@ -168,6 +168,8 @@ ToolLauncher::ToolLauncher(QWidget *parent) :
 		SLOT(setButtonBackground(bool)));
 	connect(ui->btnHome, SIGNAL(toggled(bool)), this,
 		SLOT(setButtonBackground(bool)));
+	connect(ui->prefBtn, SIGNAL(toggled(bool)), this,
+		SLOT(setButtonBackground(bool)));
 
 	ui->saveBtn->parentWidget()->setEnabled(false);
 	ui->loadBtn->parentWidget()->setEnabled(false);
@@ -207,7 +209,8 @@ ToolLauncher::ToolLauncher(QWidget *parent) :
 	tl_api->ApiObject::load(*settings);
 
 	insertMenuOptions();
-	ui->menu->setMinimumSize(ui->menu->sizeHint());
+	ui->menu->setMinimumSize(ui->menu->sizeHint() + QSize(40, 0));
+
 	/* Show a smooth opening when the app starts */
 	ui->menu->toggleMenu(true);
 
@@ -215,6 +218,17 @@ ToolLauncher::ToolLauncher(QWidget *parent) :
 	connect(ui->loadBtn, &QPushButton::clicked, this, &ToolLauncher::loadSession);
 
 	setupHomepage();
+
+	connect(ui->menu, &MenuAnim::finished, [=](bool opened) {
+		for (auto tools : ui->widget->findChildren<MenuOption *>())
+			tools->setMaximumWidth(opened ? 500 : 64);
+	});
+
+	prefPanel = new Preferences(this);
+	prefPanel->setVisible(false);
+	connect(ui->prefBtn, &QPushButton::clicked, [=](){
+		swapMenu(static_cast<QWidget*>(prefPanel));
+	});
 }
 
 void ToolLauncher::saveSession()
@@ -1359,6 +1373,11 @@ void ToolLauncher::highlight(bool on, int position)
 			x->highlightNeighbour(on);
 			return;
 		}
+}
+
+Preferences *ToolLauncher::getPrefPanel() const
+{
+	return prefPanel;
 }
 
 void ToolLauncher::UpdatePosition(QWidget *widget, int position){
