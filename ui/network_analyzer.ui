@@ -174,95 +174,17 @@ QPushButton:!checked {
                <number>0</number>
               </property>
               <item>
-               <widget class="adiscope::dBgraph" name="dbgraph">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
+               <layout class="QVBoxLayout" name="verticalLayout_13">
+                <property name="spacing">
+                 <number>0</number>
                 </property>
-                <property name="frameShape">
-                 <enum>QFrame::NoFrame</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Plain</enum>
-                </property>
-                <property name="color" stdset="0">
-                 <color>
-                  <red>255</red>
-                  <green>114</green>
-                  <blue>0</blue>
-                 </color>
-                </property>
-                <property name="xaxis_title" stdset="0">
-                 <string>Frequency (Hz)</string>
-                </property>
-                <property name="yaxis_title" stdset="0">
-                 <string>Magnitude (dB)</string>
-                </property>
-                <property name="xmin" stdset="0">
-                 <double>1000.000000000000000</double>
-                </property>
-                <property name="xmax" stdset="0">
-                 <double>50000.000000000000000</double>
-                </property>
-                <property name="ymin" stdset="0">
-                 <double>-90.000000000000000</double>
-                </property>
-                <property name="ymax" stdset="0">
-                 <double>10.000000000000000</double>
-                </property>
-                <property name="log_freq" stdset="0">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="adiscope::dBgraph" name="phasegraph">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="frameShape">
-                 <enum>QFrame::NoFrame</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Plain</enum>
-                </property>
-                <property name="color" stdset="0">
-                 <color>
-                  <red>144</red>
-                  <green>19</green>
-                  <blue>254</blue>
-                 </color>
-                </property>
-                <property name="xaxis_title" stdset="0">
-                 <string>Frequency (Hz)</string>
-                </property>
-                <property name="yaxis_title" stdset="0">
-                 <string>Phase (°)</string>
-                </property>
-                <property name="yunit" stdset="0">
-                 <string>°</string>
-                </property>
-                <property name="xmin" stdset="0">
-                 <double>1000.000000000000000</double>
-                </property>
-                <property name="xmax" stdset="0">
-                 <double>50000.000000000000000</double>
-                </property>
-                <property name="ymin" stdset="0">
-                 <double>-180.000000000000000</double>
-                </property>
-                <property name="ymax" stdset="0">
-                 <double>180.000000000000000</double>
-                </property>
-                <property name="log_freq" stdset="0">
-                 <bool>true</bool>
-                </property>
-               </widget>
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_dbgraph"/>
+                </item>
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_phasegraph"/>
+                </item>
+               </layout>
               </item>
              </layout>
             </widget>
@@ -1170,70 +1092,6 @@ QPushButton:!pressed { border-image: url(:/icons/setup_btn_unchecked.svg); }</st
    </hints>
   </connection>
   <connection>
-   <sender>minFreq</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>dbgraph</receiver>
-   <slot>setXMin(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>957</x>
-     <y>90</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>468</x>
-     <y>294</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>maxFreq</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>dbgraph</receiver>
-   <slot>setXMax(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>969</x>
-     <y>90</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>468</x>
-     <y>294</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>minFreq</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>phasegraph</receiver>
-   <slot>setXMin(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>957</x>
-     <y>90</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>468</x>
-     <y>640</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>maxFreq</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>phasegraph</receiver>
-   <slot>setXMax(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>969</x>
-     <y>90</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>468</x>
-     <y>640</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>magMin</sender>
    <signal>valueChanged(double)</signal>
    <receiver>magMax</receiver>
@@ -1294,70 +1152,6 @@ QPushButton:!pressed { border-image: url(:/icons/setup_btn_unchecked.svg); }</st
     <hint type="destinationlabel">
      <x>995</x>
      <y>338</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>magMax</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>dbgraph</receiver>
-   <slot>setYMax(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1111</x>
-     <y>322</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>460</x>
-     <y>253</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>magMin</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>dbgraph</receiver>
-   <slot>setYMin(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>995</x>
-     <y>322</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>460</x>
-     <y>253</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>phaseMin</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>phasegraph</receiver>
-   <slot>setYMin(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>995</x>
-     <y>338</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>460</x>
-     <y>519</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>phaseMax</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>phasegraph</receiver>
-   <slot>setYMax(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1111</x>
-     <y>338</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>460</x>
-     <y>519</y>
     </hint>
    </hints>
   </connection>
@@ -1486,38 +1280,6 @@ QPushButton:!pressed { border-image: url(:/icons/setup_btn_unchecked.svg); }</st
     <hint type="destinationlabel">
      <x>1070</x>
      <y>307</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>isLog</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>phasegraph</receiver>
-   <slot>useLogFreq(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1035</x>
-     <y>159</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>477</x>
-     <y>509</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>isLog</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>dbgraph</receiver>
-   <slot>useLogFreq(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1035</x>
-     <y>159</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>477</x>
-     <y>229</y>
     </hint>
    </hints>
   </connection>

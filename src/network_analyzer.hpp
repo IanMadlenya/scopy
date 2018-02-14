@@ -24,7 +24,7 @@
 #include "iio_manager.hpp"
 #include "signal_sample.hpp"
 #include "tool.hpp"
-
+#include "dbgraph.hpp"
 #include <QtConcurrentRun>
 
 extern "C" {
@@ -66,6 +66,8 @@ namespace adiscope {
 		struct iio_device *adc;
 		std::shared_ptr<GenericAdc> adc_dev;
 		boost::shared_ptr<iio_manager> iio;
+        dBgraph m_dBgraph;
+        dBgraph m_phaseGraph;
 
 		QFuture<void> thd;
 		bool stop;
