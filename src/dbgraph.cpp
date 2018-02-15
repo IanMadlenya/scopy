@@ -22,6 +22,8 @@
 #include "osc_scale_engine.h"
 #include "osc_scale_zoomer.h"
 
+#include "plotpickerwrapper.h"
+
 #include <qwt_plot_layout.h>
 
 using namespace adiscope;
@@ -55,8 +57,8 @@ dBgraph::dBgraph(QWidget *parent) : QwtPlot(parent),
 
 	/* draw_x / draw_y: Outmost X / Y scales. Only draw the labels */
 	formatter = static_cast<PrefixFormatter *>(new MetricPrefixFormatter);
-	draw_x = new OscScaleDraw(formatter, "Hz");
-	draw_x->setFloatPrecision(2);
+    draw_x = new OscScaleDraw(formatter, "Hz");
+    draw_x->setFloatPrecision(2);
 	draw_x->enableComponent(QwtAbstractScaleDraw::Ticks, false);
 	draw_x->enableComponent(QwtAbstractScaleDraw::Backbone, false);
 	setAxisScaleDraw(QwtPlot::xTop, draw_x);
@@ -140,11 +142,23 @@ dBgraph::dBgraph(QWidget *parent) : QwtPlot(parent),
     connect(d_vBar2, SIGNAL(pixelPositionChanged(int)),
             SLOT(onVbar2PixelPosChanged(int)));
 
+    connect(d_vBar1, SIGNAL(pixelPositionChanged(int)),
+            SLOT(onCursor1Moved(int)));
+    connect(d_vBar2, SIGNAL(pixelPositionChanged(int)),
+            SLOT(onCursor2Moved(int)));
+
+
+    d_naCursorReadouts = new NaCursorReadouts(this);
+    d_naCursorReadouts->setVisible(false);
+
+    picker = new PlotPickerWrapper(QwtPlot::xTop,QwtPlot::yLeft,this->canvas());
+
 }
 
 dBgraph::~dBgraph()
 {
 	delete formatter;
+    delete picker;
 }
 
 QWidget* dBgraph::bottomHandlesArea(){
@@ -226,6 +240,9 @@ void dBgraph::setXTitle(const QString& title)
 void dBgraph::setYTitle(const QString& title)
 {
 	setAxisTitle(QwtPlot::yLeft, title);
+    d_naCursorReadouts->setCustomLabel1("Cur"+title.mid(0,3)+"1");
+    d_naCursorReadouts->setCustomLabel2("Cur"+title.mid(0,3)+"2");
+    d_naCursorReadouts->setDeltaLabel("Δ"+title.mid(0,3));
 }
 
 void dBgraph::setXMin(double val)
@@ -321,5 +338,77 @@ void dBgraph::toggleCursors(bool en){
         d_vBar2->setVisible(en);
         d_hCursorHandle1->setVisible(en);
         d_hCursorHandle2->setVisible(en);
+
+        d_naCursorReadouts->setVisible(en);
+    }
+}
+
+void dBgraph::onCursor1Moved(int value){
+    QString text;
+
+    auto point = picker->pointCoordinates(QPoint(value,0));
+    text = draw_x->label(point.x()).text();
+
+    d_naCursorReadouts->setFreqCursor1Text(text);
+    d_naCursorReadouts->setCustomValue1(cursorIntersection(point.x()));
+
+    int d1 = d_naCursorReadouts->customValue1().split(" ")[0].toInt();
+    int d2 = d_naCursorReadouts->customValue2().split(" ")[0].toInt();
+
+    d_naCursorReadouts->setDeltaValue(QString::number(d2-d1) +" "+ draw_y->getUnitType());
+}
+
+void dBgraph::onCursor2Moved(int value){
+    QString text;
+
+    auto point = picker->pointCoordinates(QPoint(value,0));
+    text = draw_x->label(point.x()).text();
+
+    d_naCursorReadouts->setFreqCursor2Text(text);
+    d_naCursorReadouts->setCustomValue2(cursorIntersection(point.x()));
+
+    int d1 = d_naCursorReadouts->customValue1().split(" ")[0].toInt();
+    int d2 = d_naCursorReadouts->customValue2().split(" ")[0].toInt();
+
+    d_naCursorReadouts->setDeltaValue(QString::number(d2-d1)+" "+ draw_y->getUnitType());
+}
+
+QString dBgraph::cursorIntersection(qreal freq)
+{
+    if(xdata.size() == 0 || xdata.data()[xdata.size()-1] < freq){
+        return QString("-");//for the case when there is no plot
+    }
+    else{
+        double leftFreq,rightFreq,leftCustom,rightCustom;
+        int rightIndex = -1;
+        int leftIndex = -1;
+
+        for(int i=1;i<xdata.size();i++){
+            if(xdata.data()[i-1] <= freq && freq <= xdata.data()[i]){
+                leftIndex=i-1;
+                rightIndex=i;
+            }
+        }
+
+        if(leftIndex == -1 || rightIndex == -1){
+            return QString("-");
+        }
+
+        if(!log_freq){
+            leftFreq = xdata.data()[leftIndex];
+            rightFreq = xdata.data()[rightIndex];
+        }
+        else{
+            freq = log10(freq);
+            leftFreq = log10(xdata.data()[leftIndex]);
+            rightFreq = log10(xdata.data()[rightIndex]);
+        }
+
+        leftCustom = ydata.data()[leftIndex];
+        rightCustom = ydata.data()[rightIndex];
+
+        double val = (rightCustom - leftCustom)/(rightFreq - leftFreq)*(freq-leftFreq)+leftCustom;
+
+        return QString::number(val,'f',0) +" "+ draw_y->getUnitType();
     }
 }
