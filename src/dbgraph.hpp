@@ -31,109 +31,109 @@
 #include "plotpickerwrapper.h"
 
 namespace adiscope {
-	class OscScaleDraw;
-	class PrefixFormatter;
-	class OscScaleZoomer;
+class OscScaleDraw;
+class PrefixFormatter;
+class OscScaleZoomer;
 
-	class dBgraph : public QwtPlot
-	{
-		Q_OBJECT
+class dBgraph : public QwtPlot
+{
+	Q_OBJECT
 
-		Q_PROPERTY(int numSamples
-				READ getNumSamples
-				WRITE setNumSamples
-		)
+	Q_PROPERTY(int numSamples
+	           READ getNumSamples
+	           WRITE setNumSamples
+	          )
 
-		Q_PROPERTY(QColor color
-				READ getColor
-				WRITE setColor
-		)
+	Q_PROPERTY(QColor color
+	           READ getColor
+	           WRITE setColor
+	          )
 
-		Q_PROPERTY(QString xaxis_title READ xTitle WRITE setXTitle);
-		Q_PROPERTY(QString yaxis_title READ yTitle WRITE setYTitle);
+	Q_PROPERTY(QString xaxis_title READ xTitle WRITE setXTitle);
+	Q_PROPERTY(QString yaxis_title READ yTitle WRITE setYTitle);
 
-		Q_PROPERTY(double xmin MEMBER xmin WRITE setXMin);
-		Q_PROPERTY(double xmax MEMBER xmax WRITE setXMax);
-		Q_PROPERTY(double ymin MEMBER ymin WRITE setYMin);
-		Q_PROPERTY(double ymax MEMBER ymax WRITE setYMax);
+	Q_PROPERTY(double xmin MEMBER xmin WRITE setXMin);
+	Q_PROPERTY(double xmax MEMBER xmax WRITE setXMax);
+	Q_PROPERTY(double ymin MEMBER ymin WRITE setYMin);
+	Q_PROPERTY(double ymax MEMBER ymax WRITE setYMax);
 
-		Q_PROPERTY(QString xunit READ xUnit WRITE setXUnit);
-		Q_PROPERTY(QString yunit READ yUnit WRITE setYUnit);
+	Q_PROPERTY(QString xunit READ xUnit WRITE setXUnit);
+	Q_PROPERTY(QString yunit READ yUnit WRITE setYUnit);
 
-		Q_PROPERTY(bool log_freq MEMBER log_freq WRITE useLogFreq);
+	Q_PROPERTY(bool log_freq MEMBER log_freq WRITE useLogFreq);
 
-	public:
-		explicit dBgraph(QWidget *parent = nullptr);
-		~dBgraph();
+public:
+	explicit dBgraph(QWidget *parent = nullptr);
+	~dBgraph();
 
-		void setAxesScales(double xmin, double xmax,
-				double ymin, double ymax);
-		void setAxesTitles(const QString& x, const QString& y);
+	void setAxesScales(double xmin, double xmax,
+	                   double ymin, double ymax);
+	void setAxesTitles(const QString& x, const QString& y);
 
-		int getNumSamples() const;
+	int getNumSamples() const;
 
-		const QColor& getColor() const;
-		QString xTitle() const;
-		QString yTitle() const;
-        QWidget *bottomHandlesArea();
-        QString cursorIntersection(qreal text);
+	const QColor& getColor() const;
+	QString xTitle() const;
+	QString yTitle() const;
+	QWidget *bottomHandlesArea();
+	QString cursorIntersection(qreal text);
 
-    public Q_SLOTS:
-		void plot(double x, double y);
-		void reset();
+public Q_SLOTS:
+	void plot(double x, double y);
+	void reset();
 
-		void setNumSamples(int num);
-		void setColor(const QColor& color);
-		void setXTitle(const QString& title);
-		void setYTitle(const QString& title);
-		void setXMin(double val);
-		void setXMax(double val);
-		void setYMin(double val);
-		void setYMax(double val);
+	void setNumSamples(int num);
+	void setColor(const QColor& color);
+	void setXTitle(const QString& title);
+	void setYTitle(const QString& title);
+	void setXMin(double val);
+	void setXMax(double val);
+	void setYMin(double val);
+	void setYMax(double val);
 
-		QString xUnit() const;
-		QString yUnit() const;
-		void setXUnit(const QString& unit);
-		void setYUnit(const QString& unit);
+	QString xUnit() const;
+	QString yUnit() const;
+	void setXUnit(const QString& unit);
+	void setYUnit(const QString& unit);
 
-		void useLogFreq(bool use_log_freq);
+	void useLogFreq(bool use_log_freq);
 
-        void onVbar1PixelPosChanged(int pos);
-        void onVbar2PixelPosChanged(int pos);
+	void onVbar1PixelPosChanged(int pos);
+	void onVbar2PixelPosChanged(int pos);
 
-        void toggleCursors(bool);
+	void toggleCursors(bool);
 
-        void onCursor1Moved(int);
-        void onCursor2Moved(int);
+	void onCursor1Moved(int);
+	void onCursor2Moved(int);
 
-	private:
-		QwtPlotCurve curve;
-		unsigned int numSamples;
-		double xmin, xmax, ymin, ymax;
-		QColor color;
-		bool log_freq;
+private:
+	QwtPlotCurve curve;
+	unsigned int numSamples;
+	double xmin, xmax, ymin, ymax;
+	QColor color;
+	bool log_freq;
 
-        bool d_cursorsEnabled;
+	bool d_cursorsEnabled;
 
-		OscScaleDraw *draw_x, *draw_y;
-		PrefixFormatter *formatter;
-		OscScaleZoomer *zoomer;
+	OscScaleDraw *draw_x, *draw_y;
+	PrefixFormatter *formatter;
+	OscScaleZoomer *zoomer;
 
-		CustomFifo<double> xdata, ydata;
+	CustomFifo<double> xdata, ydata;
 
-        SymbolController *d_symbolCtrl;
-        HorizHandlesArea *d_bottomHandlesArea;
+	SymbolController *d_symbolCtrl;
+	HorizHandlesArea *d_bottomHandlesArea;
 
-        PlotLineHandleH *d_hCursorHandle1;
-        VertBar *d_vBar1;
-        PlotLineHandleH *d_hCursorHandle2;
-        VertBar *d_vBar2;
+	PlotLineHandleH *d_hCursorHandle1;
+	VertBar *d_vBar1;
+	PlotLineHandleH *d_hCursorHandle2;
+	VertBar *d_vBar2;
 
-        PlotPickerWrapper* picker;
+	PlotPickerWrapper *picker;
 
 
-        NaCursorReadouts *d_naCursorReadouts;
-	};
+	NaCursorReadouts *d_naCursorReadouts;
+};
 }
 
 #endif /* DBGRAPH_HPP */
