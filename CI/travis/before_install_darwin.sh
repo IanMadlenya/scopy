@@ -95,7 +95,7 @@ cd ${WORKDIR}
 if [ ! -d qwt ]; then
   git clone https://github.com/osakared/qwt.git -b qwt-6.1-multiaxes
   cd qwt
-  curl https://raw.githubusercontent.com/analogdevicesinc/scopy/osx/qwt-6.1-multiaxes.patch |patch -p1 --forward
+  curl https://raw.githubusercontent.com/analogdevicesinc/scopy/master/qwt-6.1-multiaxes.patch |patch -p1 --forward
   qmake
   make -j4 >/dev/null
 else
