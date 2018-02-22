@@ -195,7 +195,6 @@ namespace adiscope {
 		void onCmbMemoryDepthChanged(QString);
 		void setSinksDisplayOneBuffer(bool);
 		void cleanBuffersAllSinks();
-		void preparePlotSampleCount();
 		void resetStreamingFlag(bool);
 		void onFilledScreen(bool, unsigned int);
 
