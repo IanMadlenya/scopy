@@ -192,11 +192,12 @@ namespace adiscope {
 
 		void readPreferences();
 
+		void onCmbMemoryDepthChanged(QString);
 		void setSinksDisplayOneBuffer(bool);
 		void cleanBuffersAllSinks();
 		void preparePlotSampleCount();
 		void resetStreamingFlag(bool);
-		void onFilledScreen(bool);
+		void onFilledScreen(bool, unsigned int);
 
 	public Q_SLOTS:
 		void enableLabels(bool);
@@ -211,6 +212,7 @@ namespace adiscope {
 		unsigned long active_plot_sample_count;
 		long long active_trig_sample_count;
 		double active_time_pos;
+		double memory_adjusted_time_pos;
 		double last_set_time_pos;
 		unsigned long last_set_sample_count;
 		int zoom_level;
@@ -282,6 +284,7 @@ namespace adiscope {
 		StateUpdater *triggerUpdater;
 
 		int fft_size;
+		int fft_plot_size;
 
 		NumberSeries voltsPerDivList;
 		NumberSeries secPerDivList;
